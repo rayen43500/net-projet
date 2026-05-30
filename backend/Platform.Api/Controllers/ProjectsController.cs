@@ -36,6 +36,11 @@ public class ProjectsController : ControllerBase
   [HttpPost]
   public async Task<ActionResult<Project>> Create(Project project)
   {
+    if (string.IsNullOrWhiteSpace(project.QuoteId))
+    {
+      return BadRequest("QuoteId is required to create a project.");
+    }
+
     var created = await _service.CreateAsync(project);
     return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
   }

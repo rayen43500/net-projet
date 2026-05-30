@@ -1,3 +1,4 @@
+using MongoDB.Driver;
 using Platform.Api.Data;
 using Platform.Api.Entities;
 
@@ -93,8 +94,7 @@ public class WorkflowService
       return null;
     }
 
-    project.Status = ProjectStatus.Completed;
-    project.EndDate = DateTime.UtcNow;
+    project.Status = ProjectStatus.OnHold;
     project.UpdatedAtUtc = DateTime.UtcNow;
 
     var invoice = new Invoice
@@ -149,6 +149,7 @@ public class WorkflowService
     if (project != null)
     {
       project.Status = ProjectStatus.Completed;
+      project.EndDate = DateTime.UtcNow;
       project.UpdatedAtUtc = DateTime.UtcNow;
       await _context.Projects.ReplaceOneAsync(item => item.Id == project.Id, project);
     }

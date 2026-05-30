@@ -11,6 +11,24 @@ export const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: "'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+    fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
+    h3: {
+      fontFamily: "'Playfair Display', 'DM Sans', serif"
+    },
+    h4: {
+      fontFamily: "'Playfair Display', 'DM Sans', serif"
+    }
+  },
+  shape: {
+    borderRadius: 12
+  },
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 16
+        }
+      }
+    }
   }
 });

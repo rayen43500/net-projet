@@ -16,18 +16,61 @@ public class AuthController : ControllerBase
   }
 
   [HttpPost("login")]
-  public ActionResult<LoginResponse> Login(LoginRequest request)
+  public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
   {
-    if (string.IsNullOrWhiteSpace(request.Email))
+    if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
     {
-      return BadRequest("Email is required");
+      return BadRequest("Email and password are required");
     }
 
-    var (token, expiresAtUtc) = _authService.GenerateToken(request.Email, "Client");
+    var result = await _authService.AuthenticateAsync(request.Email, request.Password);
+    if (!result.Success)
+    {
+      return Unauthorized();
+    }
+
     return new LoginResponse
     {
-      Token = token,
-      ExpiresAtUtc = expiresAtUtc
+      Token = result.Token,
+      ExpiresAtUtc = result.ExpiresAtUtc,
+      Role = result.Role,
+      UserId = result.UserId
+    };
+  }
+
+  [HttpPost("logout")]
+  public IActionResult Logout()
+  {
+    return Ok(new { message = "Logged out" });
+  }
+
+  [HttpPost("register")]
+  public async Task<ActionResult<LoginResponse>> Register(RegisterRequest request)
+  {
+    if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+    {
+      return BadRequest("Email and password are required");
+    }
+
+    var result = await _authService.RegisterAsync(
+      request.FullName,
+      request.Email,
+      request.Phone,
+      request.Role,
+      request.Password
+    );
+
+    if (!result.Success)
+    {
+      return Conflict(result.Error);
+    }
+
+    return new LoginResponse
+    {
+      Token = result.Token,
+      ExpiresAtUtc = result.ExpiresAtUtc,
+      Role = result.Role,
+      UserId = result.UserId
     };
   }
 }

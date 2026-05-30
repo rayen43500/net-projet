@@ -6,6 +6,7 @@ using Platform.Api.Data;
 using Platform.Api.Entities;
 using Platform.Api.Hubs;
 using Platform.Api.Repositories;
+using Platform.Api.Seed;
 using Platform.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,7 @@ builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ProjectService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<WorkflowService>();
 builder.Services.AddScoped(typeof(CrudService<>));
 
 builder.Services.AddScoped<IRepository<Client>>(sp => new MongoRepository<Client>(sp.GetRequiredService<MongoDbContext>().Clients));
@@ -74,5 +76,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<ChatHub>("/hubs/chat");
+
+await SeedData.EnsureSeedAsync(app.Services);
 
 app.Run();

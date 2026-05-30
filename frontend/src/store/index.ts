@@ -1,9 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/auth/authSlice";
+import { authStorage } from "../features/auth/authStorage";
+
+const persistedAuth = authStorage.load();
 
 export const store = configureStore({
   reducer: {
     auth: authReducer
+  },
+  preloadedState: {
+    auth: {
+      token: persistedAuth.token,
+      role: persistedAuth.role,
+      userId: persistedAuth.userId
+    }
   }
 });
 

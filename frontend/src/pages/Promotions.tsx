@@ -2,8 +2,12 @@ import ModulePage from "./ModulePage";
 
 const Promotions = () => (
   <ModulePage
-    title="Offres promotionnelles"
-    description="Gestion des codes promo et remises temporaires."
+    title="Promotions"
+    description="Remises, coupons et campagnes."
+    actions={["Nouvelle promo", "Exporter", "Actualiser"]}
+    searchPlaceholder="Rechercher une promotion"
+    columns={["Nom", "Reduction", "Date debut", "Date fin", "Statut"]}
+    rows={[["Spring Sale", "15%", "2026-05-01", "2026-05-31", "Active"]]}
   />
 );
 
