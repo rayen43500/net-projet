@@ -21,6 +21,8 @@ public static class TaskStatus
 public static class QuoteRequestStatus
 {
   public const string Draft = "Draft";
+  public const string Submitted = "Submitted";
+  public const string Reviewed = "Reviewed";
   public const string Quoted = "Quoted";
   public const string Cancelled = "Cancelled";
 }
@@ -43,6 +45,7 @@ public static class InvoiceStatus
 public static class PaymentStatus
 {
   public const string Pending = "Pending";
+  public const string Completed = "Completed";
   public const string Paid = "Paid";
   public const string Failed = "Failed";
 }

@@ -15,7 +15,7 @@ const QuoteRequests = () => (
       { key: "status", label: "Statut" }
     ]}
     fields={[
-      { key: "clientId", label: "Client ID" },
+      { key: "clientId", label: "Client", remoteEndpoint: "/clients", remoteLabelKey: "name" },
       { key: "companyName", label: "Societe" },
       { key: "contactName", label: "Contact" },
       { key: "email", label: "Email" },

@@ -14,7 +14,7 @@ const Teams = () => (
     ]}
     fields={[
       { key: "name", label: "Nom", required: true },
-      { key: "leadId", label: "Responsable ID" },
+      { key: "leadId", label: "Responsable", remoteEndpoint: "/users", remoteLabelKey: "fullName" },
       { key: "memberIds", label: "Membres IDs", type: "tags", helperText: "Separez les IDs par des virgules." }
     ]}
   />

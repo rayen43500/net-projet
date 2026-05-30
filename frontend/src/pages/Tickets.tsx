@@ -17,8 +17,8 @@ const Tickets = () => (
     fields={[
       { key: "subject", label: "Sujet", required: true },
       { key: "description", label: "Description", type: "textarea" },
-      { key: "clientId", label: "Client ID" },
-      { key: "projectId", label: "Projet ID" },
+      { key: "clientId", label: "Client", remoteEndpoint: "/clients", remoteLabelKey: "name" },
+      { key: "projectId", label: "Projet", remoteEndpoint: "/projects", remoteLabelKey: "name" },
       { key: "priority", label: "Priorite", type: "select", defaultValue: "Normal", options: ["Low", "Normal", "High", "Urgent"] },
       { key: "status", label: "Statut", type: "select", defaultValue: "Ouvert", options: ["Ouvert", "En cours", "Resolu", "Ferme"] }
     ]}

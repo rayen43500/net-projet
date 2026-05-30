@@ -26,6 +26,8 @@ import {
 import { ChangeEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { apiClient } from "../api/client";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store";
 
 type FieldType =
   | "text"
@@ -49,6 +51,9 @@ export type ModuleField = {
   helperText?: string;
   defaultValue?: unknown;
   readOnly?: boolean;
+  remoteEndpoint?: string;
+  remoteLabelKey?: string;
+  remoteValueKey?: string;
 };
 
 export type ModuleColumn = {
@@ -92,13 +97,26 @@ const toInputDateTime = (value: unknown) => {
   return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 16);
 };
 
-const formatValue = (value: unknown, column: ModuleColumn) => {
+const formatValue = (
+  value: unknown,
+  column: ModuleColumn,
+  fields?: ModuleField[],
+  remoteOptions?: Record<string, { value: string; label: string }[]>
+) => {
   if (column.render) {
     return null;
   }
 
   if (value === null || value === undefined || value === "") {
     return "-";
+  }
+
+  // Check if there are remote options for this column key to map ID -> human-readable label
+  if (fields && remoteOptions && remoteOptions[column.key]) {
+    const match = remoteOptions[column.key].find((opt) => opt.value === String(value));
+    if (match) {
+      return match.label;
+    }
   }
 
   if (column.type === "boolean") {
@@ -117,7 +135,7 @@ const formatValue = (value: unknown, column: ModuleColumn) => {
   if (column.type === "money") {
     return Number(value).toLocaleString(undefined, {
       maximumFractionDigits: 2
-    });
+    }) + " €";
   }
 
   if (column.type === "tags") {
@@ -225,6 +243,8 @@ const ModulePage = ({
   pageSize = 8
 }: ModulePageProps) => {
   const location = useLocation();
+  const authUserId = useSelector((state: RootState) => state.auth.userId);
+  const authRole = useSelector((state: RootState) => state.auth.role);
   const initialSearch = useMemo(() => new URLSearchParams(location.search).get("q") ?? "", [location.search]);
   const [records, setRecords] = useState<ModuleRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -236,6 +256,48 @@ const ModulePage = ({
   const [editingRecord, setEditingRecord] = useState<ModuleRecord | null>(null);
   const [formData, setFormData] = useState<ModuleRecord>({});
   const [status, setStatus] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null);
+  const [remoteOptions, setRemoteOptions] = useState<Record<string, { value: string; label: string }[]>>({});
+
+  useEffect(() => {
+    const fetchRemoteOptions = async () => {
+      const newOptions: Record<string, { value: string; label: string }[]> = {};
+      for (const field of fields) {
+        if (field.remoteEndpoint) {
+          try {
+            const response = await apiClient.get<any[]>(field.remoteEndpoint);
+            const data = response.data;
+            if (Array.isArray(data)) {
+              newOptions[field.key] = data.map((item) => {
+                const val = String(item[field.remoteValueKey ?? "id"] ?? item.id ?? item._id ?? "");
+                let label = "";
+                if (field.remoteLabelKey) {
+                  label = String(item[field.remoteLabelKey] ?? "");
+                }
+                if (!label) {
+                  label = String(
+                    item.name ?? 
+                    item.fullName ?? 
+                    item.reference ?? 
+                    item.title ?? 
+                    item.subject ?? 
+                    item.companyName ?? 
+                    item.email ?? 
+                    val
+                  );
+                }
+                return { value: val, label };
+              });
+            }
+          } catch (err) {
+            console.error(`Failed to fetch remote options for field ${field.key}:`, err);
+          }
+        }
+      }
+      setRemoteOptions(newOptions);
+    };
+
+    fetchRemoteOptions();
+  }, [fields]);
 
   const loadData = async () => {
     setLoading(true);
@@ -259,14 +321,47 @@ const ModulePage = ({
     setPage(1);
   }, [initialSearch]);
 
+  const roleFilteredRecords = useMemo(() => {
+    if (!authUserId) return records;
+
+    // 1. If Client: filter records belonging to them
+    if (authRole === "Client") {
+      return records.filter((record) => {
+        // If the record has a clientId, check if it matches the client's authUserId
+        if (record.clientId !== undefined && record.clientId !== null) {
+          return String(record.clientId) === authUserId;
+        }
+        // If the record is a notification, check if the recipientId matches
+        if (record.recipientId !== undefined && record.recipientId !== null) {
+          return String(record.recipientId) === authUserId;
+        }
+        return true;
+      });
+    }
+
+    // 2. If Developer: filter tasks to assignee
+    if (authRole === "Developer") {
+      return records.filter((record) => {
+        // If it's a task, only show assigned to them
+        if (record.assigneeId !== undefined && record.assigneeId !== null) {
+          return String(record.assigneeId) === authUserId;
+        }
+        return true;
+      });
+    }
+
+    // Admins and Managers see all records
+    return records;
+  }, [records, authRole, authUserId]);
+
   const filteredRecords = useMemo(() => {
     const query = search.trim().toLowerCase();
     if (!query) {
-      return records;
+      return roleFilteredRecords;
     }
 
-    return records.filter((record) => getSearchValue(record).includes(query));
-  }, [records, search]);
+    return roleFilteredRecords.filter((record) => getSearchValue(record).includes(query));
+  }, [roleFilteredRecords, search]);
 
   const pageCount = Math.max(1, Math.ceil(filteredRecords.length / pageSize));
   const paginatedRecords = filteredRecords.slice((page - 1) * pageSize, page * pageSize);
@@ -462,7 +557,7 @@ const ModulePage = ({
     return (
       <TextField
         key={field.key}
-        select={field.type === "select"}
+        select={field.type === "select" || Boolean(field.remoteEndpoint)}
         label={field.label}
         type={
           field.type === "number"
@@ -488,6 +583,13 @@ const ModulePage = ({
           ? field.options?.map((option) => (
               <MenuItem key={option} value={option}>
                 {option}
+              </MenuItem>
+            ))
+          : null}
+        {field.remoteEndpoint && remoteOptions[field.key]
+          ? remoteOptions[field.key].map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
               </MenuItem>
             ))
           : null}
@@ -569,7 +671,7 @@ const ModulePage = ({
                       <TableRow key={record.id ?? JSON.stringify(record)} hover>
                         {columns.map((column) => (
                           <TableCell key={column.key}>
-                            {column.render ? column.render(record[column.key], record) : formatValue(record[column.key], column)}
+                            {column.render ? column.render(record[column.key], record) : formatValue(record[column.key], column, fields, remoteOptions)}
                           </TableCell>
                         ))}
                         {!readOnly ? (

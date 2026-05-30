@@ -19,8 +19,8 @@ const Tasks = () => (
     fields={[
       { key: "title", label: "Titre", required: true },
       { key: "description", label: "Description", type: "textarea" },
-      { key: "projectId", label: "Projet ID" },
-      { key: "assigneeId", label: "Responsable ID" },
+      { key: "projectId", label: "Projet", remoteEndpoint: "/projects", remoteLabelKey: "name" },
+      { key: "assigneeId", label: "Responsable", remoteEndpoint: "/users", remoteLabelKey: "fullName" },
       { key: "priority", label: "Priorite", type: "select", defaultValue: "Medium", options: ["Low", "Medium", "High", "Urgent"] },
       { key: "status", label: "Statut", type: "select", defaultValue: "To Do", options: ["To Do", "In Progress", "In Review", "Done"] },
       { key: "progress", label: "Progression", type: "number" },

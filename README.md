@@ -72,3 +72,11 @@ npm run dev
 - CRUD: /api/quote-requests, /api/quotes, /api/invoices, /api/payments
 - CRUD: /api/documents, /api/tickets, /api/blog-posts
 - CRUD: /api/promotions, /api/notifications, /api/teams, /api/roles, /api/audit-logs
+
+Rôle	Email	Mot de passe	Description de son rôle
+Admin	admin@dsp.local	Admin@123	Contrôle total sur tout le système.
+Manager	manager@dsp.local	Manager@123	Validation des devis/factures, assignation des tâches.
+Developer 1	dev1@dsp.local	Developer@123	Réalisation des tâches, accès aux documents de projet.
+Developer 2	dev2@dsp.local	Developer@123	Réalisation des tâches, accès aux documents de projet.
+Client 1	client1@dsp.local	Client@123	Demandes de devis, tickets de support, messagerie.
+

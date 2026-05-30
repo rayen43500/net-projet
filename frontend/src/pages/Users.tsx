@@ -19,7 +19,7 @@ const Users = () => (
       { key: "email", label: "Email", required: true },
       { key: "phone", label: "Telephone" },
       { key: "role", label: "Role", type: "select", defaultValue: "Client", options: ["Admin", "Manager", "Developer", "Client"] },
-      { key: "teamId", label: "Equipe ID" },
+      { key: "teamId", label: "Equipe", remoteEndpoint: "/teams", remoteLabelKey: "name" },
       { key: "avatarUrl", label: "Avatar", type: "image" },
       { key: "password", label: "Mot de passe", type: "password", helperText: "Obligatoire a la creation, laissez vide pour conserver le mot de passe actuel." }
     ]}

@@ -17,8 +17,8 @@ const Quotes = () => (
       { key: "validUntil", label: "Valide jusqu'au", type: "date" }
     ]}
     fields={[
-      { key: "quoteRequestId", label: "Demande ID" },
-      { key: "clientId", label: "Client ID" },
+      { key: "quoteRequestId", label: "Demande de devis", remoteEndpoint: "/quote-requests", remoteLabelKey: "companyName" },
+      { key: "clientId", label: "Client", remoteEndpoint: "/clients", remoteLabelKey: "name" },
       { key: "reference", label: "Reference", required: true },
       { key: "subtotal", label: "Sous-total", type: "number" },
       { key: "taxRate", label: "TVA", type: "number" },

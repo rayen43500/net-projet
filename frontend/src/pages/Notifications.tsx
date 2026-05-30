@@ -17,7 +17,7 @@ const Notifications = () => (
     fields={[
       { key: "title", label: "Titre", required: true },
       { key: "message", label: "Message", type: "textarea" },
-      { key: "recipientId", label: "Destinataire ID" },
+      { key: "recipientId", label: "Destinataire", remoteEndpoint: "/users", remoteLabelKey: "fullName" },
       { key: "channel", label: "Canal", type: "select", defaultValue: "System", options: ["System", "Email", "Chat", "SMS"] },
       { key: "isRead", label: "Lu", type: "boolean" }
     ]}

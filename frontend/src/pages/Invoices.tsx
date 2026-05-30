@@ -18,8 +18,8 @@ const Invoices = () => (
     ]}
     fields={[
       { key: "reference", label: "Reference", required: true },
-      { key: "clientId", label: "Client ID" },
-      { key: "projectId", label: "Projet ID" },
+      { key: "clientId", label: "Client", remoteEndpoint: "/clients", remoteLabelKey: "name" },
+      { key: "projectId", label: "Projet", remoteEndpoint: "/projects", remoteLabelKey: "name" },
       { key: "subtotal", label: "Sous-total", type: "number" },
       { key: "taxRate", label: "TVA", type: "number" },
       { key: "total", label: "Total", type: "number" },

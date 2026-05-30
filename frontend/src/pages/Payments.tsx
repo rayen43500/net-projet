@@ -16,8 +16,8 @@ const Payments = () => (
       { key: "status", label: "Statut" }
     ]}
     fields={[
-      { key: "invoiceId", label: "Facture ID" },
-      { key: "clientId", label: "Client ID" },
+      { key: "invoiceId", label: "Facture", remoteEndpoint: "/invoices", remoteLabelKey: "reference" },
+      { key: "clientId", label: "Client", remoteEndpoint: "/clients", remoteLabelKey: "name" },
       { key: "amount", label: "Montant", type: "number" },
       { key: "method", label: "Methode", type: "select", defaultValue: "Bank", options: ["Bank", "Card", "Cash", "Wallet"] },
       { key: "paidOn", label: "Date paiement", type: "date" },

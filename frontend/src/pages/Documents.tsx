@@ -17,7 +17,7 @@ const Documents = () => (
     fields={[
       { key: "name", label: "Nom", required: true },
       { key: "documentType", label: "Type" },
-      { key: "projectId", label: "Projet ID" },
+      { key: "projectId", label: "Projet", remoteEndpoint: "/projects", remoteLabelKey: "name" },
       { key: "version", label: "Version", type: "number", defaultValue: 1 },
       { key: "url", label: "Image ou document URL", type: "image", helperText: "L'upload accepte les images; les autres fichiers peuvent etre colles en URL." }
     ]}
