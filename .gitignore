@@ -1,0 +1,21 @@
+# Node
+node_modules/
+.npm/
+dist/
+
+# Vite
+.vite/
+
+# .NET
+bin/
+obj/
+
+# User files
+*.user
+*.suo
+*.cache
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
