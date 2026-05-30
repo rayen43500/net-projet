@@ -4,10 +4,28 @@ const QuoteRequests = () => (
   <ModulePage
     title="Demandes de devis"
     description="Reception et traitement des demandes clients."
-    actions={["Nouvelle demande", "Exporter", "Actualiser"]}
+    apiEndpoint="/quote-requests"
+    createLabel="Nouvelle demande"
     searchPlaceholder="Rechercher une demande"
-    columns={["Client", "Service", "Date", "Statut", "Actions"]}
-    rows={[["Alpha Corp", "Dev web", "2026-05-24", "En cours", "Voir"]]}
+    columns={[
+      { key: "companyName", label: "Societe" },
+      { key: "contactName", label: "Contact" },
+      { key: "projectType", label: "Type projet" },
+      { key: "budget", label: "Budget", type: "money" },
+      { key: "status", label: "Statut" }
+    ]}
+    fields={[
+      { key: "clientId", label: "Client ID" },
+      { key: "companyName", label: "Societe" },
+      { key: "contactName", label: "Contact" },
+      { key: "email", label: "Email" },
+      { key: "phone", label: "Telephone" },
+      { key: "projectType", label: "Type projet" },
+      { key: "budget", label: "Budget", type: "number" },
+      { key: "description", label: "Description", type: "textarea" },
+      { key: "attachmentUrls", label: "Image / piece jointe", type: "image-list" },
+      { key: "status", label: "Statut", type: "select", defaultValue: "Draft", options: ["Draft", "Quoted", "Cancelled"] }
+    ]}
   />
 );
 

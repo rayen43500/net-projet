@@ -48,8 +48,16 @@ npm run dev
 ## Configuration
 
 - La chaine de connexion MongoDB est dans backend/Platform.Api/appsettings.json.
+- Par defaut, le backend utilise MongoDB local sans authentification: mongodb://localhost:27017.
 - Par defaut, l API ecoute sur http://localhost:5000 et expose Swagger sur /swagger.
 - Le frontend proxy les appels /api vers le backend.
+
+## Comptes de demo
+
+- Admin: admin@dsp.local / Admin@123
+- Manager: manager@dsp.local / Manager@123
+- Developer: developer@dsp.local / Developer@123
+- Client: client@dsp.local / Client@123
 
 ## Remarques
 

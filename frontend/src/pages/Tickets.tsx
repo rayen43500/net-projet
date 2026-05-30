@@ -4,10 +4,24 @@ const Tickets = () => (
   <ModulePage
     title="Support"
     description="Suivi des tickets clients et priorites."
-    actions={["Nouveau ticket", "Exporter", "Actualiser"]}
+    apiEndpoint="/tickets"
+    createLabel="Nouveau ticket"
     searchPlaceholder="Rechercher un ticket"
-    columns={["Sujet", "Client", "Priorite", "Statut", "Date", "Actions"]}
-    rows={[["Bug login", "Alpha Corp", "Urgent", "Ouvert", "2026-05-28", "Voir"]]}
+    columns={[
+      { key: "subject", label: "Sujet" },
+      { key: "clientId", label: "Client" },
+      { key: "projectId", label: "Projet" },
+      { key: "priority", label: "Priorite" },
+      { key: "status", label: "Statut" }
+    ]}
+    fields={[
+      { key: "subject", label: "Sujet", required: true },
+      { key: "description", label: "Description", type: "textarea" },
+      { key: "clientId", label: "Client ID" },
+      { key: "projectId", label: "Projet ID" },
+      { key: "priority", label: "Priorite", type: "select", defaultValue: "Normal", options: ["Low", "Normal", "High", "Urgent"] },
+      { key: "status", label: "Statut", type: "select", defaultValue: "Ouvert", options: ["Ouvert", "En cours", "Resolu", "Ferme"] }
+    ]}
   />
 );
 

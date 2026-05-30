@@ -20,11 +20,11 @@ import Notifications from "./pages/Notifications";
 import Teams from "./pages/Teams";
 import Roles from "./pages/Roles";
 import AuditLogs from "./pages/AuditLogs";
+import Users from "./pages/Users";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import Chat from "./pages/Chat";
 import Search from "./pages/Search";
-import ModulePage from "./pages/ModulePage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import RequireAuth from "./features/auth/RequireAuth";
@@ -56,7 +56,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "stats",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager"]}>
 						<AdvancedStats />
 					</RequireAuth>
 				)
@@ -88,7 +88,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "clients",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager"]}>
 						<Clients />
 					</RequireAuth>
 				)
@@ -96,7 +96,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "tasks",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager", "Developer"]}>
 						<Tasks />
 					</RequireAuth>
 				)
@@ -104,7 +104,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "quote-requests",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager", "Client"]}>
 						<QuoteRequests />
 					</RequireAuth>
 				)
@@ -112,7 +112,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "quotes",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager", "Client"]}>
 						<Quotes />
 					</RequireAuth>
 				)
@@ -120,7 +120,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "invoices",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager", "Client"]}>
 						<Invoices />
 					</RequireAuth>
 				)
@@ -128,7 +128,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "payments",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager", "Client"]}>
 						<Payments />
 					</RequireAuth>
 				)
@@ -152,7 +152,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "blog",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager"]}>
 						<Blog />
 					</RequireAuth>
 				)
@@ -160,7 +160,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "promotions",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager"]}>
 						<Promotions />
 					</RequireAuth>
 				)
@@ -168,7 +168,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "notifications",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager"]}>
 						<Notifications />
 					</RequireAuth>
 				)
@@ -176,7 +176,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "teams",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager"]}>
 						<Teams />
 					</RequireAuth>
 				)
@@ -184,7 +184,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "roles",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin"]}>
 						<Roles />
 					</RequireAuth>
 				)
@@ -192,7 +192,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "audit-logs",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin"]}>
 						<AuditLogs />
 					</RequireAuth>
 				)
@@ -208,7 +208,7 @@ export const routes: RouteObject[] = [
 			{
 				path: "settings",
 				element: (
-					<RequireAuth>
+					<RequireAuth roles={["Admin", "Manager"]}>
 						<Settings />
 					</RequireAuth>
 				)
@@ -224,15 +224,8 @@ export const routes: RouteObject[] = [
 			{
 				path: "users",
 				element: (
-					<RequireAuth>
-						<ModulePage
-							title="Utilisateurs"
-							description="Gestion des comptes utilisateurs, acces et roles."
-							actions={["Nouvel utilisateur", "Exporter", "Actualiser"]}
-							searchPlaceholder="Rechercher un utilisateur"
-							columns={["Nom", "Email", "Role", "Actions"]}
-							rows={[["Admin", "admin@dsp.local", "Admin", "Voir"]]}
-						/>
+					<RequireAuth roles={["Admin"]}>
+						<Users />
 					</RequireAuth>
 				)
 			}

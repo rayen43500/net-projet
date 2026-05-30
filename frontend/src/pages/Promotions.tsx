@@ -4,10 +4,25 @@ const Promotions = () => (
   <ModulePage
     title="Promotions"
     description="Remises, coupons et campagnes."
-    actions={["Nouvelle promo", "Exporter", "Actualiser"]}
+    apiEndpoint="/promotions"
+    createLabel="Nouvelle promo"
     searchPlaceholder="Rechercher une promotion"
-    columns={["Nom", "Reduction", "Date debut", "Date fin", "Statut"]}
-    rows={[["Spring Sale", "15%", "2026-05-01", "2026-05-31", "Active"]]}
+    columns={[
+      { key: "name", label: "Nom" },
+      { key: "code", label: "Code" },
+      { key: "discountPercent", label: "Reduction" },
+      { key: "startsOn", label: "Debut", type: "date" },
+      { key: "endsOn", label: "Fin", type: "date" },
+      { key: "isActive", label: "Active", type: "boolean" }
+    ]}
+    fields={[
+      { key: "name", label: "Nom", required: true },
+      { key: "code", label: "Code" },
+      { key: "discountPercent", label: "Reduction (%)", type: "number" },
+      { key: "startsOn", label: "Date debut", type: "date" },
+      { key: "endsOn", label: "Date fin", type: "date" },
+      { key: "isActive", label: "Active", type: "boolean", defaultValue: true }
+    ]}
   />
 );
 

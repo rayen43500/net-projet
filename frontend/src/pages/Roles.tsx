@@ -4,10 +4,17 @@ const Roles = () => (
   <ModulePage
     title="Roles"
     description="Gestion des roles et permissions."
-    actions={["Nouveau role", "Exporter", "Actualiser"]}
+    apiEndpoint="/roles"
+    createLabel="Nouveau role"
     searchPlaceholder="Rechercher un role"
-    columns={["Nom du role", "Permissions", "Actions"]}
-    rows={[["Admin", "All", "Voir"]]}
+    columns={[
+      { key: "name", label: "Nom du role" },
+      { key: "permissions", label: "Permissions", type: "tags" }
+    ]}
+    fields={[
+      { key: "name", label: "Nom du role", required: true },
+      { key: "permissions", label: "Permissions", type: "tags", helperText: "Exemple: Projects.Read, Projects.Write" }
+    ]}
   />
 );
 

@@ -1,14 +1,17 @@
 import { AppBar, Box, Button, Stack, Toolbar, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../store";
 import { clearAuth } from "../features/auth/authSlice";
 import { authStorage } from "../features/auth/authStorage";
+import { ColorModeContext } from "../themeContext";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state: RootState) => state.auth.token);
+  const colorMode = useContext(ColorModeContext);
 
   const handleLogout = () => {
     dispatch(clearAuth());
@@ -24,6 +27,9 @@ const Navbar = () => {
         </Typography>
         <Box sx={{ flex: 1 }} />
         <Stack direction="row" spacing={1}>
+          <Button color="inherit" onClick={colorMode.toggleColorMode}>
+            {colorMode.mode === "light" ? "Mode sombre" : "Mode clair"}
+          </Button>
           {token ? (
             <>
               <Button color="inherit" component={Link} to="/dashboard">

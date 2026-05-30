@@ -4,10 +4,29 @@ const Projects = () => (
   <ModulePage
     title="Gestion des projets"
     description="Suivi des projets, statuts, budget et planning."
-    actions={["Nouveau projet", "Exporter", "Actualiser"]}
+    apiEndpoint="/projects"
+    createLabel="Nouveau projet"
     searchPlaceholder="Rechercher un projet"
-    columns={["Nom", "Client", "Statut", "Date debut", "Date fin", "Actions"]}
-    rows={[["Site vitrine", "Alpha Corp", "Active", "2026-05-01", "2026-06-15", "Voir"]]}
+    columns={[
+      { key: "reference", label: "Reference" },
+      { key: "name", label: "Nom" },
+      { key: "clientId", label: "Client" },
+      { key: "status", label: "Statut" },
+      { key: "startDate", label: "Debut", type: "date" },
+      { key: "endDate", label: "Fin", type: "date" },
+      { key: "budget", label: "Budget", type: "money" }
+    ]}
+    fields={[
+      { key: "reference", label: "Reference" },
+      { key: "name", label: "Nom", required: true },
+      { key: "description", label: "Description", type: "textarea" },
+      { key: "clientId", label: "Client ID" },
+      { key: "quoteId", label: "Devis ID" },
+      { key: "status", label: "Statut", type: "select", defaultValue: "Draft", options: ["Draft", "Pending Approval", "Active", "On Hold", "Completed", "Cancelled"] },
+      { key: "startDate", label: "Date debut", type: "date" },
+      { key: "endDate", label: "Date fin", type: "date" },
+      { key: "budget", label: "Budget", type: "number" }
+    ]}
   />
 );
 

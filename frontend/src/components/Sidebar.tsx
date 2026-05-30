@@ -1,59 +1,18 @@
 import { Box, Divider, Drawer, List, ListItemButton, ListItemText, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-
-const navigationSections = [
-  {
-    title: "Accueil",
-    items: [
-      { label: "Home", path: "/" },
-      { label: "Dashboard", path: "/dashboard" }
-    ]
-  },
-  {
-    title: "Gestion",
-    items: [
-      { label: "Clients", path: "/clients" },
-      { label: "Projets", path: "/projects" },
-      { label: "Taches", path: "/tasks" },
-      { label: "Equipes", path: "/teams" }
-    ]
-  },
-  {
-    title: "Commercial",
-    items: [
-      { label: "Services", path: "/services" },
-      { label: "Demandes devis", path: "/quote-requests" },
-      { label: "Devis", path: "/quotes" },
-      { label: "Factures", path: "/invoices" },
-      { label: "Paiements", path: "/payments" }
-    ]
-  },
-  {
-    title: "Contenu",
-    items: [
-      { label: "Documents", path: "/documents" },
-      { label: "Blog", path: "/blog" },
-      { label: "Promotions", path: "/promotions" }
-    ]
-  },
-  {
-    title: "Administration",
-    items: [
-      { label: "Utilisateurs", path: "/users" },
-      { label: "Roles", path: "/roles" },
-      { label: "Notifications", path: "/notifications" },
-      { label: "Audit Logs", path: "/audit-logs" },
-      { label: "Parametres", path: "/settings" }
-    ]
-  },
-  {
-    title: "Communication",
-    items: [{ label: "Chat", path: "/chat" }]
-  }
-];
+import { canAccess, navigationSections } from "../features/auth/access";
+import type { RootState } from "../store";
 
 const Sidebar = () => {
   const location = useLocation();
+  const role = useSelector((state: RootState) => state.auth.role);
+  const visibleSections = navigationSections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => canAccess(role, item.roles))
+    }))
+    .filter((section) => section.items.length > 0);
 
   return (
     <Drawer
@@ -71,7 +30,7 @@ const Sidebar = () => {
       </Box>
       <Divider />
       <Box sx={{ overflow: "auto" }}>
-        {navigationSections.map((section) => (
+        {visibleSections.map((section) => (
           <Box key={section.title} sx={{ px: 1, py: 1 }}>
             <Typography variant="overline" color="text.secondary" sx={{ px: 1 }}>
               {section.title}

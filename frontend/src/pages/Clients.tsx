@@ -4,11 +4,20 @@ const Clients = () => (
   <ModulePage
     title="Gestion des clients"
     description="Contacts, societes et historique des projets."
-    actions={["Nouveau client", "Exporter", "Actualiser"]}
+    apiEndpoint="/clients"
+    createLabel="Nouveau client"
     searchPlaceholder="Rechercher un client"
-    columns={["Nom", "Email", "Telephone", "Societe", "Actions"]}
-    rows={[
-      ["Alpha Corp", "contact@alpha.com", "+212 600 111 222", "Alpha Corp", "Voir"]
+    columns={[
+      { key: "name", label: "Societe" },
+      { key: "contactName", label: "Contact" },
+      { key: "email", label: "Email" },
+      { key: "phone", label: "Telephone" }
+    ]}
+    fields={[
+      { key: "name", label: "Societe", required: true },
+      { key: "contactName", label: "Contact" },
+      { key: "email", label: "Email", required: true },
+      { key: "phone", label: "Telephone" }
     ]}
   />
 );

@@ -4,10 +4,18 @@ const AuditLogs = () => (
   <ModulePage
     title="Journal d audit"
     description="Historique des actions et modifications."
-    actions={["Exporter", "Actualiser"]}
+    apiEndpoint="/audit-logs"
+    readOnly
     searchPlaceholder="Rechercher un log"
-    columns={["Utilisateur", "Action", "Module", "Date", "Details"]}
-    rows={[["admin@dsp.local", "Update", "Projects", "2026-05-29", "Status changed"]]}
+    columns={[
+      { key: "actorId", label: "Utilisateur" },
+      { key: "action", label: "Action" },
+      { key: "entityName", label: "Module" },
+      { key: "entityId", label: "Element" },
+      { key: "details", label: "Details" },
+      { key: "createdAtUtc", label: "Date", type: "datetime" }
+    ]}
+    fields={[]}
   />
 );
 

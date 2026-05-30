@@ -1,4 +1,5 @@
 import { Box, Button, Card, CardContent, Stack, TextField, Typography } from "@mui/material";
+import { ChangeEvent } from "react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { apiClient } from "../api/client";
@@ -11,6 +12,7 @@ const Profile = () => {
   const [phone, setPhone] = useState("");
   const [teamId, setTeamId] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,6 +50,32 @@ const Profile = () => {
     setStatus("Profil mis a jour.");
   };
 
+  const uploadAvatar = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setStatus("Veuillez choisir une image valide.");
+      return;
+    }
+
+    const body = new FormData();
+    body.append("file", file);
+    setUploading(true);
+    try {
+      const response = await apiClient.post<{ url: string }>("/uploads/images", body);
+      setAvatarUrl(response.data.url);
+      setStatus("Avatar uploade.");
+    } catch {
+      setStatus("Upload avatar impossible.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <Box>
       <Typography variant="h4" sx={{ mb: 2 }}>
@@ -74,6 +102,18 @@ const Profile = () => {
               value={avatarUrl}
               onChange={(event) => setAvatarUrl(event.target.value)}
             />
+            {avatarUrl ? (
+              <Box
+                component="img"
+                src={avatarUrl}
+                alt="Avatar"
+                sx={{ width: 96, height: 96, objectFit: "cover", borderRadius: "50%" }}
+              />
+            ) : null}
+            <Button variant="outlined" component="label" disabled={uploading}>
+              {uploading ? "Upload..." : "Uploader avatar"}
+              <input hidden type="file" accept="image/*" onChange={uploadAvatar} />
+            </Button>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
               <Button variant="outlined" onClick={loadProfile}>
                 Charger

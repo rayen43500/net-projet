@@ -4,10 +4,29 @@ const Invoices = () => (
   <ModulePage
     title="Factures"
     description="Generation et suivi des factures."
-    actions={["Nouvelle facture", "Exporter", "Actualiser"]}
+    apiEndpoint="/invoices"
+    createLabel="Nouvelle facture"
     searchPlaceholder="Rechercher une facture"
-    columns={["Numero", "Client", "Montant", "Echeance", "Statut", "Actions"]}
-    rows={[["INV-2026-01", "Alpha Corp", "12000", "2026-06-10", "Sent", "Voir"]]}
+    columns={[
+      { key: "reference", label: "Reference" },
+      { key: "clientId", label: "Client" },
+      { key: "projectId", label: "Projet" },
+      { key: "total", label: "Total", type: "money" },
+      { key: "issuedOn", label: "Emission", type: "date" },
+      { key: "dueOn", label: "Echeance", type: "date" },
+      { key: "status", label: "Statut" }
+    ]}
+    fields={[
+      { key: "reference", label: "Reference", required: true },
+      { key: "clientId", label: "Client ID" },
+      { key: "projectId", label: "Projet ID" },
+      { key: "subtotal", label: "Sous-total", type: "number" },
+      { key: "taxRate", label: "TVA", type: "number" },
+      { key: "total", label: "Total", type: "number" },
+      { key: "status", label: "Statut", type: "select", defaultValue: "Draft", options: ["Draft", "Sent", "Paid", "Overdue"] },
+      { key: "issuedOn", label: "Date emission", type: "date" },
+      { key: "dueOn", label: "Date echeance", type: "date" }
+    ]}
   />
 );
 
