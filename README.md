@@ -14,6 +14,13 @@ Monorepo pour une application web complete avec frontend React et backend ASP.NE
 - backend/Platform.Api/ : API ASP.NET Core
 - docker-compose.yml : MongoDB + mongo-express
 
+## Modules couverts
+
+- Auth, utilisateurs et roles
+- Clients, services, devis, factures, paiements
+- Projets, taches, documents, tickets support
+- Blog, promotions, notifications, audit log
+
 ## Demarrage rapide (Windows)
 
 1) Lancer MongoDB
@@ -48,3 +55,12 @@ npm run dev
 
 - Les identites sont en format ObjectId MongoDB.
 - Le module Auth fournit un endpoint de login de demo.
+
+## API de base
+
+- GET /api/health
+- POST /api/auth/login
+- CRUD: /api/clients, /api/services, /api/projects, /api/tasks
+- CRUD: /api/quote-requests, /api/quotes, /api/invoices, /api/payments
+- CRUD: /api/documents, /api/tickets, /api/blog-posts
+- CRUD: /api/promotions, /api/notifications, /api/teams, /api/roles, /api/audit-logs

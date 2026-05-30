@@ -8,6 +8,6 @@ public class TaskItem : BaseEntity
   public string AssigneeId { get; set; } = string.Empty;
   public string Priority { get; set; } = "Medium";
   public DateTime? DueDate { get; set; }
-  public string Status { get; set; } = "A faire";
+  public string Status { get; set; } = TaskStatus.ToDo;
   public int Progress { get; set; }
 }
